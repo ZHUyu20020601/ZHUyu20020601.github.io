@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"zhuyu20020601.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="brief introductionWe focus on the possibility of using diffusion technology as a trigger of backdoor attack. Specifically, we mask over a small patch of an image and using diffusion to repaint the blo">
+  <meta name="description" content="brief introductionBackdoor attack is a strategy that using poisoned date or artifice training method to ‘mislead’ model to do as the attackers wish, which can be catastrophic in scenarios like self-dr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Diffusion Attack Research">
 <meta property="og:url" content="https://zhuyu20020601.github.io/2023/07/05/backdoor/index.html">
 <meta property="og:site_name" content="ZHU YU">
-<meta property="og:description" content="brief introductionWe focus on the possibility of using diffusion technology as a trigger of backdoor attack. Specifically, we mask over a small patch of an image and using diffusion to repaint the blo">
+<meta property="og:description" content="brief introductionBackdoor attack is a strategy that using poisoned date or artifice training method to ‘mislead’ model to do as the attackers wish, which can be catastrophic in scenarios like self-dr">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://zhuyu20020601.github.io/images/bdimg/gt.png">
 <meta property="og:image" content="https://zhuyu20020601.github.io/images/bdimg/mask.png">
@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://zhuyu20020601.github.io/images/bdimg/inpaint.png">
 <meta property="og:image" content="https://zhuyu20020601.github.io/images/EWC.jpg">
 <meta property="article:published_time" content="2023-07-05T04:52:59.000Z">
-<meta property="article:modified_time" content="2023-08-02T07:04:37.227Z">
+<meta property="article:modified_time" content="2023-08-12T07:09:12.285Z">
 <meta property="article:author" content="ZHU YU">
 <meta property="article:tag" content="experience">
 <meta name="twitter:card" content="summary">
@@ -207,7 +207,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-08-02 15:04:37" itemprop="dateModified" datetime="2023-08-02T15:04:37+08:00">2023-08-02</time>
+                <time title="Modified: 2023-08-12 15:09:12" itemprop="dateModified" datetime="2023-08-12T15:09:12+08:00">2023-08-12</time>
               </span>
 
           
@@ -221,7 +221,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="brief-introduction"><a href="#brief-introduction" class="headerlink" title="brief introduction"></a>brief introduction</h3><p>We focus on the possibility of using diffusion technology as a trigger of backdoor attack. Specifically, we mask over a small patch of an image and using diffusion to repaint the blocked part. We superimpose the origin and the painted part into one image, and use such image as poisoned data to train a model, typically resent18, resulting in misclassification.<br>When the patch becomes smaller, the model can’t learn the trigger clearly, so we tried to use incremental learning method to strengthen the trigger knowledge learnt by the model. Finally, the model shall be examed by SOTA defensive techniques, such as NC and Beatrix.</p>
+        <h3 id="brief-introduction"><a href="#brief-introduction" class="headerlink" title="brief introduction"></a>brief introduction</h3><p>Backdoor attack is a strategy that using poisoned date or artifice training method to ‘mislead’ model to do as the attackers wish, which can be catastrophic in scenarios like self-driving.<br><br>We focus on the possibility of using diffusion technology as a trigger of backdoor attack. Specifically, we mask over a small patch of an image and using diffusion to repaint the blocked part. We superimpose the origin and the painted part into one image, and use such image as poisoned data to train a model, typically resent18, resulting in misclassification.<br>When the patch becomes smaller, the model can’t learn the trigger clearly, so we tried to use incremental learning method to strengthen the trigger knowledge learnt by the model. Finally, the model shall be examed by SOTA defensive techniques, such as NC and Beatrix.</p>
 <table>
 <thead>
 <tr>
@@ -235,20 +235,20 @@
 <td align="center"><img src="/images/bdimg/gt.png" width="700"></td>
 <td align="center"><img src="/images/bdimg/mask.png" width="700"></td>
 <td align="center"><img src="/images/bdimg/imgwithmask.png" width="600"></td>
-<td align="center"><img src="/images/bdimg/inpaint.png" width="700"></td>
+<td align="center"><img src="/images/bdimg/inpaint.png" width="800"></td>
 </tr>
 </tbody></table>
 <h3 id="my-contribution"><a href="#my-contribution" class="headerlink" title="my contribution"></a>my contribution</h3><ul>
-<li><p>I found the trade off between ASR on poisoned data and the correct classify rate on ground truth.<br>At first we found the ASR was pretty high, and it seemed that the diffusion strategy is unbelievably useful. For insurance I let the attacked model to classify the correspond ground truth images of the triggered images. It appeared that the correct classify rate was quite low, which indicate that our strategy wasn’t complete.</p>
+<li><p>I found the trade off between attack successful rate(ASR) on poisoned data and the correct rate on ground truth.<br>At first we found the ASR was pretty high, and it seemed that the diffusion strategy is unbelievably useful. For insurance I let the attacked model to classify the correspond ground truth images of the triggered images. It appeared that the correct classify rate was quite low, which indicate that our strategy wasn’t complete.</p>
 </li>
-<li><p>I adopted the incremental learning method EWC and MAS<br>Through discussion we decided to use incremental learning to enhance our backdoor trigger insertion. I browsed papers and reproduce the means of EWC and MAS. To my disappointment, they didn’t provide much contribution to the trigger effectiveness.</p>
+<li><p>I adopted the incremental learning method EWC and MAS<br>Through discussion we decided to use incremental learning to enhance our backdoor trigger insertion. I browsed papers and represented classic means of EWC and MAS. To my disappointment, they didn’t provide much contribution to the trigger effectiveness.</p>
 <p><img src="/images/EWC.jpg" alt="EWC result"></p>
 </li>
 </ul>
 <h3 id="knowledge-and-skills-gained"><a href="#knowledge-and-skills-gained" class="headerlink" title="knowledge and skills gained"></a>knowledge and skills gained</h3><ul>
 <li><p>broaden my horizon about the domain of AI security<br>We changed several survey directions before we decided to carry out research on diffusion backdoor This experience guarantees me of knowledges and techniques about AI security especially the backdoor attack area, such as knowledge distillation, semi-supervised learning, federal learning, etc. </p>
 </li>
-<li><p>develop the patient and skills<br>I developed the patient and skills to read long papers and codes, reproduce repositories, and refine parameters.</p>
+<li><p>develop the patient and skills<br>I developed the patient and skills to read long papers and codes, represent repositories, and refine parameters.</p>
 </li>
 </ul>
 
